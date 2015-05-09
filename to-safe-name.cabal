@@ -2,7 +2,7 @@
 -- documentation, see http://haskell.org/cabal/users-guide/
 
 name:                to-safe-name
-version:             0.1.0.0
+version:             1.0.0.0
 synopsis:            to-safe-name
 -- description:
 homepage:            https://github.com/ncaq/to-safe-name
