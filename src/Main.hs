@@ -1,6 +1,7 @@
 import           Control.Applicative
 import           Control.Monad
 import           Data.Maybe
+import           Data.Monoid
 import           System.Directory
 import           System.FilePath.Posix
 import           System.IO
@@ -26,15 +27,18 @@ affirmation True = do
 check :: IO Bool
 check  = do
   currdir <- getCurrentDirectory
-  putStr "max depth = "
-  maxDepth currdir >>= print
-  a <- shellFind currdir
-  mapM_ putStrLn a
-  putStrLn "↓"
-  mapM_ putStrLn $ fmap toSafeString a
-  case a of
-    [] -> return False
-    _  -> return True
+  depth <- maxDepth currdir
+  putStrLn ("max depth = " <> show depth)
+  oldNames <- shellFind currdir
+  case oldNames of
+   [] -> return False
+   _  -> mapM_ (\(o, n) -> diffLikePut o n) (zip oldNames newNames) >> return True
+    where newNames = map toSafeString oldNames
+
+diffLikePut :: String -> String -> IO ()
+diffLikePut o n = do
+  putStrLn ("-" <> o)
+  putStrLn ("+" <> n)
 
 allOrderRename :: IO ()
 allOrderRename = do
